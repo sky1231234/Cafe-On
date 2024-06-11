@@ -1,6 +1,7 @@
 package com.example.order.member.service;
 
 import com.example.order.member.domain.AuthType;
+import com.example.order.member.domain.Grade;
 import com.example.order.member.domain.Member;
 import com.example.order.member.dto.response.MemberResponse;
 import com.example.order.member.errorCode.MemberErrorCode;
@@ -26,17 +27,17 @@ public class MemberService {
 
         Member member = checkExistMember(id);
 
-        return memberMapper.INSTANCE.toMemberResponse(member);
+        return memberMapper.toMemberResponse(member);
     }
 
     public List<MemberResponse> getMemberList(){
         List<Member> memberList = memberRepository.findAll();
 
-        return memberMapper.INSTANCE.toMemberResponseList(memberList);
+        return memberMapper.toMemberResponseList(memberList);
     }
 
     @Transactional
-    public Member signUp(String memberId, String password, String name, AuthType authType,String phoneNum){
+    public Member signUp(String memberId, String password, String name, AuthType authType, String phoneNum, Grade grade){
 
         Optional<Member> member = memberRepository.findByMemberId(memberId);
 
@@ -44,7 +45,7 @@ public class MemberService {
             throw new RuntimeException(MemberErrorCode.ALREADY_EXIST_MEMBER_ID_EXCEPTION.getValue());
         }
 
-        Member newMember = Member.of(memberId, password, name, authType, phoneNum);
+        Member newMember = Member.of(memberId, password, name, authType, phoneNum, grade);
         return memberRepository.save(newMember);
     }
 

@@ -67,16 +67,16 @@ public class BusinessHoursFixture {
     }
 
     public static List<OperationTimePerDayUpdateRequest> 운영시간_리스트_UPDATE_REQUEST_DTO(){
-        OperationTimeRequest 평일_운영시간 = new OperationTimeRequest(new TimeRequest(9, 0), new TimeRequest(17, 0));
-        OperationTimeRequest 주말_운영시간 = new OperationTimeRequest(new TimeRequest(0, 0), new TimeRequest(0, 0));
+        OperationTimeUpdateRequest 평일_운영시간 = new OperationTimeUpdateRequest(new TimeUpdateRequest(9, 0), new TimeUpdateRequest(17, 0));
+        OperationTimeUpdateRequest 주말_운영시간 = new OperationTimeUpdateRequest(new TimeUpdateRequest(0, 0), new TimeUpdateRequest(0, 0));
 
-        OperationTimePerDayUpdateRequest 월요일 =  new OperationTimePerDayUpdateRequest(new DaysRequest(Days.MONDAY), 주말_운영시간);
-        OperationTimePerDayUpdateRequest 화요일 =  new OperationTimePerDayUpdateRequest(new DaysRequest(Days.TUESDAY), 주말_운영시간);
-        OperationTimePerDayUpdateRequest 수요일 =  new OperationTimePerDayUpdateRequest(new DaysRequest(Days.WEDNESDAY), 주말_운영시간);
-        OperationTimePerDayUpdateRequest 목요일 =  new OperationTimePerDayUpdateRequest(new DaysRequest(Days.THURSDAY), 주말_운영시간);
-        OperationTimePerDayUpdateRequest 금요일 =  new OperationTimePerDayUpdateRequest(new DaysRequest(Days.FRIDAY), 주말_운영시간);
-        OperationTimePerDayUpdateRequest 토요일 =  new OperationTimePerDayUpdateRequest(new DaysRequest(Days.SATURDAY), 평일_운영시간);
-        OperationTimePerDayUpdateRequest 일요일 =  new OperationTimePerDayUpdateRequest(new DaysRequest(Days.SUNDAY), 평일_운영시간);
+        OperationTimePerDayUpdateRequest 월요일 =  new OperationTimePerDayUpdateRequest(new DaysUpdateRequest(Days.MONDAY), 주말_운영시간);
+        OperationTimePerDayUpdateRequest 화요일 =  new OperationTimePerDayUpdateRequest(new DaysUpdateRequest(Days.TUESDAY), 주말_운영시간);
+        OperationTimePerDayUpdateRequest 수요일 =  new OperationTimePerDayUpdateRequest(new DaysUpdateRequest(Days.WEDNESDAY), 주말_운영시간);
+        OperationTimePerDayUpdateRequest 목요일 =  new OperationTimePerDayUpdateRequest(new DaysUpdateRequest(Days.THURSDAY), 주말_운영시간);
+        OperationTimePerDayUpdateRequest 금요일 =  new OperationTimePerDayUpdateRequest(new DaysUpdateRequest(Days.FRIDAY), 주말_운영시간);
+        OperationTimePerDayUpdateRequest 토요일 =  new OperationTimePerDayUpdateRequest(new DaysUpdateRequest(Days.SATURDAY), 평일_운영시간);
+        OperationTimePerDayUpdateRequest 일요일 =  new OperationTimePerDayUpdateRequest(new DaysUpdateRequest(Days.SUNDAY), 평일_운영시간);
 
         List<OperationTimePerDayUpdateRequest> 운영시간_리스트 = new ArrayList<>();
 

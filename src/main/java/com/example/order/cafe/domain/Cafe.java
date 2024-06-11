@@ -22,7 +22,7 @@ public class Cafe extends BaseTimeEntity implements Serializable {
     @JoinColumn(unique = true)
     private Member member;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @Embedded
     @JoinColumn(unique = true)
     private CafeInfo cafeInfo;
 
@@ -75,7 +75,7 @@ public class Cafe extends BaseTimeEntity implements Serializable {
     }
 
     public Member getMember(){
-        return Member.of(member.getMemberId(), member.getPassword(), member.getName(), member.getAuthType(), member.getPhoneNum());
+        return Member.of(member.getMemberId(), member.getPassword(), member.getName(), member.getAuthType(), member.getPhoneNum(), member.getGrade());
     }
 
     public CafeInfo getCafeInfo(){
@@ -88,7 +88,7 @@ public class Cafe extends BaseTimeEntity implements Serializable {
 
     public void updateCafe(CafeInfo updateCafeInfo, BusinessHours updateBusinessHours){
         this.cafeInfo = updateCafeInfo;
-        this.businessHours = updateBusinessHours;
+        this.businessHours.addBusinessHoursList(updateBusinessHours.getOperationTimePerDayList());
     }
 
     public boolean equals(Object o) {

@@ -18,7 +18,7 @@ public class OperationTimePerDay extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private final Days days;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @Embedded
     @JoinColumn(unique = true)
     private final OperationTime operationTime;
 
@@ -45,6 +45,10 @@ public class OperationTimePerDay extends BaseTimeEntity {
 
     public static OperationTimePerDay of(Days days, OperationTime operationTime){
         return new OperationTimePerDay(days, operationTime);
+    }
+
+    public void addCafe(Cafe cafe){
+        this.cafe = cafe;
     }
 
     public void validation(OperationTime operationTime){

@@ -2,16 +2,29 @@ package com.example.order.member.mapper;
 
 import com.example.order.member.domain.Member;
 import com.example.order.member.dto.response.MemberResponse;
-import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
-import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", unmappedSourcePolicy = ReportingPolicy.IGNORE)
-public interface MemberMapper {
-    MemberMapper INSTANCE = Mappers.getMapper(MemberMapper.class);
+@Component
+public class MemberMapper {
 
-    MemberResponse toMemberResponse(Member member);
-    List<MemberResponse> toMemberResponseList(List<Member> member);
+    public MemberResponse toMemberResponse(Member member){
+        return new MemberResponse(member.getMemberId(),
+                member.getPassword(),
+                member.getName(),
+                member.getAuthType(),
+                member.getPhoneNum());
+    };
+    public List<MemberResponse> toMemberResponseList(List<Member> memberList){
+
+        return memberList.stream()
+                .map(member -> new MemberResponse(member.getMemberId(),
+                        member.getPassword(),
+                        member.getName(),
+                        member.getAuthType(),
+                        member.getPhoneNum()))
+                .toList();
+
+    };
 }

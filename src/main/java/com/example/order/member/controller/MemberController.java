@@ -7,7 +7,6 @@ import com.example.order.member.dto.response.MemberResponse;
 import com.example.order.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -56,11 +55,13 @@ public class MemberController {
             @ApiResponse(responseCode = "404", description = "회원 정보 등록 실패")
     })
     public ResponseEntity<Object> signup(@Validated @RequestBody SignUpRequest signUpRequest){
-        Member member = memberService.signUp(signUpRequest.getMemberId(),
+
+        memberService.signUp(signUpRequest.getMemberId(),
                 signUpRequest.getPassword(),
                 signUpRequest.getName(),
                 signUpRequest.getAuthType(),
-                signUpRequest.getPhoneNum());
+                signUpRequest.getPhoneNum(),
+                signUpRequest.getGrade());
 
         return ResponseEntity.created(URI.create("/members/signup")).build();
     }

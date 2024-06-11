@@ -2,51 +2,50 @@ package com.example.order.cafe.mapper;
 
 import com.example.order.cafe.domain.*;
 import com.example.order.cafe.dto.request.*;
+import com.example.order.cafe.dto.response.BusinessHoursResponse;
+import com.example.order.cafe.dto.response.CafeInfoResponse;
 import com.example.order.cafe.dto.response.CafeResponse;
-import com.example.order.cafe.dto.response.OperationTimePerDayResponse;
-import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
 
-@Mapper(componentModel = "spring",
-        unmappedSourcePolicy = ReportingPolicy.IGNORE)
-public interface CafeMapper {
-    CafeMapper INSTANCE = Mappers.getMapper(CafeMapper.class);
+@RequiredArgsConstructor
+@Component
+public class CafeMapper {
 
-    CafeResponse toCafeResponse(Cafe cafe);
+    private final CafeInfoMapper cafeInfoMapper;
+    private final BusinessHoursMapper businessHoursMapper;
 
-    List<OperationTimePerDayResponse> toOperationTimePerDayList(List<OperationTimePerDay> operationTimePerDayList);
+    public CafeResponse toCafeResponse(Cafe cafe){
 
-    default Cafe toCafe(CafeInfoCreateRequest cafeInfoCreateRequest, BusinessHoursRequest businessHoursRequest) {
+        CafeInfoResponse toCafeInfoResponse =  cafeInfoMapper.toCafeInfoResponse(cafe.getCafeInfo());
+        BusinessHoursResponse toBusinessHoursResponse = businessHoursMapper.toBusinessHoursResponse(cafe.getBusinessHours());
+
+        return new CafeResponse(toCafeInfoResponse, toBusinessHoursResponse);
+    };
+
+
+    public Cafe toCafe(CafeInfoCreateRequest cafeInfoCreateRequest, BusinessHoursRequest businessHoursRequest) {
         if ( cafeInfoCreateRequest == null && businessHoursRequest == null) {
             return null;
         }
 
-        CafeInfo cafeInfo = CafeInfoMapper.INSTANCE.toCafeInfo(cafeInfoCreateRequest);
-        BusinessHours businessHours = BusinessHoursMapper.INSTANCE.toBusinessHours(businessHoursRequest);
+        CafeInfo cafeInfo = cafeInfoMapper.toCafeInfo(cafeInfoCreateRequest);
+        BusinessHours businessHours = businessHoursMapper.toBusinessHours(businessHoursRequest);
 
         return Cafe.of(cafeInfo, businessHours);
     }
 
-    default Cafe toCafe(CafeInfoUpdateRequest cafeInfoUpdateRequest, BusinessHoursUpdateRequest businessHoursUpdateRequest) {
+    public Cafe toCafe(CafeInfoUpdateRequest cafeInfoUpdateRequest, BusinessHoursUpdateRequest businessHoursUpdateRequest) {
         if ( cafeInfoUpdateRequest == null && businessHoursUpdateRequest == null) {
             return null;
         }
 
-        CafeInfo cafeInfo = CafeInfoMapper.INSTANCE.toCafeInfo(cafeInfoUpdateRequest);
-        BusinessHours businessHours = BusinessHoursMapper.INSTANCE.toBusinessHours(businessHoursUpdateRequest);
+        CafeInfo cafeInfo = cafeInfoMapper.toCafeInfo(cafeInfoUpdateRequest);
+        BusinessHours businessHours = businessHoursMapper.toBusinessHours(businessHoursUpdateRequest);
 
         return Cafe.of(cafeInfo, businessHours);
     }
-
-    default CafeInfo mapCafeInfo(CafeInfoCreateRequest cafeInfoCreateRequest) {
-        return CafeMapper.INSTANCE.toCafeInfo(cafeInfoCreateRequest);
-    }
-
-    CafeInfo toCafeInfo(CafeInfoCreateRequest cafeInfoCreateRequest);
-
-    Cafe toCafe(CafeUpdateRequest cafeUpdateRequest);
 
 }
 

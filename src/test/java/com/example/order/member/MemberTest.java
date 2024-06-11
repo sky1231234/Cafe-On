@@ -29,14 +29,14 @@ public class MemberTest {
     @ValueSource(strings = {"abc", "abcdefghijk"})
     public void create_error_id_length(String 아이디_자릿수){
 
-
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> {
                         Member.of(아이디_자릿수,
                                 MemberFixture.비밀번호,
                                 MemberFixture.이름,
                                 MemberFixture.권한,
-                                MemberFixture.연락처);
+                                MemberFixture.연락처,
+                                MemberFixture.등급);
                 })
                 .withMessage(MemberErrorMsg.MEMBER_ID_LENGTH_ERROR_MESSAGE.getValue());
 
@@ -53,7 +53,8 @@ public class MemberTest {
                             MemberFixture.비밀번호,
                             MemberFixture.이름,
                             MemberFixture.권한,
-                            MemberFixture.연락처);
+                            MemberFixture.연락처,
+                            MemberFixture.등급);
                 })
                 .withMessage(MemberErrorMsg.MEMBER_ID_REGEX_ERROR_MESSAGE.getValue());
 
@@ -70,7 +71,8 @@ public class MemberTest {
                             MemberFixture.비밀번호,
                             MemberFixture.이름,
                             MemberFixture.권한,
-                            MemberFixture.연락처);
+                            MemberFixture.연락처,
+                                MemberFixture.등급);
                 })
                 .withMessage(MemberErrorMsg.MEMBER_ID_LENGTH_ERROR_MESSAGE.getValue());
 
@@ -87,7 +89,8 @@ public class MemberTest {
                             비밀번호_자릿수,
                             MemberFixture.이름,
                             MemberFixture.권한,
-                            MemberFixture.연락처);
+                            MemberFixture.연락처,
+                            MemberFixture.등급);
                 })
                 .withMessage(MemberErrorMsg.MEMBER_PASSWORD_LENGTH_ERROR_MESSAGE.getValue());
 
@@ -104,7 +107,8 @@ public class MemberTest {
                             MemberFixture.비밀번호,
                             이름_자릿수,
                             MemberFixture.권한,
-                            MemberFixture.연락처);
+                            MemberFixture.연락처,
+                            MemberFixture.등급);
                 })
                 .withMessage(MemberErrorMsg.MEMBER_NAME_LENGTH_ERROR_MESSAGE.getValue());
 
@@ -121,7 +125,8 @@ public class MemberTest {
                             MemberFixture.비밀번호,
                             MemberFixture.이름,
                             MemberFixture.권한,
-                            연락처_자릿수);
+                            연락처_자릿수,
+                            MemberFixture.등급);
                 })
                 .withMessage(MemberErrorMsg.MEMBER_PHONE_NUM_LENGTH_ERROR_MESSAGE.getValue());
     }
@@ -137,7 +142,8 @@ public class MemberTest {
                             MemberFixture.비밀번호,
                             MemberFixture.이름,
                             MemberFixture.권한,
-                            연락처_유효문자);
+                            연락처_유효문자,
+                            MemberFixture.등급);
                 })
                 .withMessage(MemberErrorMsg.MEMBER_PHONE_NUM_ONLY_NUMBER_REGEX_ERROR_MESSAGE.getValue());
 
@@ -154,7 +160,8 @@ public class MemberTest {
                             MemberFixture.비밀번호,
                             MemberFixture.이름,
                             MemberFixture.권한,
-                            예외_연락처);
+                            예외_연락처,
+                            MemberFixture.등급);
                 })
                 .withMessage(MemberErrorMsg.MEMBER_PHONE_NUM_LENGTH_ERROR_MESSAGE.getValue());
 

@@ -1,13 +1,10 @@
 package com.example.order.cafe;
 
 import com.example.order.cafe.domain.CafeMenu;
-import com.example.order.cafe.domain.TemperatureOption;
 import com.example.order.cafe.errorMsg.CafeMenuErrorMsg;
 import com.example.order.cafe.fixture.CafeMenuFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
@@ -21,6 +18,7 @@ public class CafeMenuTest {
 
         CafeMenu 카페메뉴 = CafeMenuFixture.카페메뉴_기본생성();
 
+        assertThat(카페메뉴).isNotNull();
         assertThat(카페메뉴.isMenuName(CafeMenuFixture.메뉴명)).isTrue();
     }
 
@@ -32,47 +30,13 @@ public class CafeMenuTest {
 
         assertThatIllegalArgumentException()
                 .isThrownBy(() ->
-                        CafeMenu.of(빈_메뉴명,
-                                CafeMenuFixture.온도옵션리스트,
+                        CafeMenu.of(CafeMenuFixture.카페ID,
+                                빈_메뉴명,
+                                CafeMenuFixture.메뉴카테고리,
                                 CafeMenuFixture.설명,
                                 CafeMenuFixture.재고,
                                 CafeMenuFixture.가격))
                 .withMessage(CafeMenuErrorMsg.MENU_NAME_LENGTH_ERROR_MESSAGE.getValue());
-    }
-
-    @DisplayName("생성 예외 : 온도옵션 리스트 - null 불가")
-    @Test
-    public void create_error_temperature_option_null(){
-
-        List<TemperatureOption> 널_온도옵션리스트 = null;
-
-        assertThatIllegalArgumentException()
-                .isThrownBy(() ->
-                        CafeMenu.of(CafeMenuFixture.메뉴명,
-                                널_온도옵션리스트,
-                                CafeMenuFixture.설명,
-                                CafeMenuFixture.재고,
-                                CafeMenuFixture.가격))
-                .withMessage(CafeMenuErrorMsg.TEMPERATURE_OPTION_NULL_ERROR_MESSAGE.getValue());
-
-    }
-
-    @DisplayName("생성 예외 : 온도옵션 리스트 - 1개 이상 포함")
-    @Test
-    public void create_error_temperature_option_empty(){
-
-        List<TemperatureOption> 빈_온도옵션리스트 = List.of();
-
-
-        assertThatIllegalArgumentException()
-                .isThrownBy(() ->
-                        CafeMenu.of(CafeMenuFixture.메뉴명,
-                                빈_온도옵션리스트,
-                                CafeMenuFixture.설명,
-                                CafeMenuFixture.재고,
-                                CafeMenuFixture.가격))
-                .withMessage(CafeMenuErrorMsg.TEMPERATURE_OPTION_EMPTY_ERROR_MESSAGE.getValue());
-
     }
 
 
@@ -84,9 +48,11 @@ public class CafeMenuTest {
 
         assertThatIllegalArgumentException()
                 .isThrownBy(() ->
-                        CafeMenu.of(CafeMenuFixture.메뉴명,
-                                CafeMenuFixture.온도옵션리스트,
-                                CafeMenuFixture.설명, 음수_재고,
+                        CafeMenu.of(CafeMenuFixture.카페ID,
+                                CafeMenuFixture.메뉴명,
+                                CafeMenuFixture.메뉴카테고리,
+                                CafeMenuFixture.설명,
+                                음수_재고,
                                 CafeMenuFixture.가격))
                 .withMessage(CafeMenuErrorMsg.STOCK_UNDER_ZERO_ERROR_MESSAGE.getValue());
     }
@@ -99,8 +65,9 @@ public class CafeMenuTest {
 
         assertThatIllegalArgumentException()
                 .isThrownBy(() ->
-                        CafeMenu.of(CafeMenuFixture.메뉴명,
-                                CafeMenuFixture.온도옵션리스트,
+                        CafeMenu.of(CafeMenuFixture.카페ID,
+                                CafeMenuFixture.메뉴명,
+                                CafeMenuFixture.메뉴카테고리,
                                 CafeMenuFixture.설명,
                                 CafeMenuFixture.재고,
                                 음수_가격))
@@ -117,8 +84,9 @@ public class CafeMenuTest {
         int 다른_재고 = 0;
 
         CafeMenu 첫번째_카페메뉴 = CafeMenuFixture.카페메뉴_기본생성();
-        CafeMenu 두번째_카페메뉴 = CafeMenu.of(CafeMenuFixture.메뉴명,
-                CafeMenuFixture.온도옵션리스트,
+        CafeMenu 두번째_카페메뉴 = CafeMenu.of(CafeMenuFixture.카페ID,
+                CafeMenuFixture.메뉴명,
+                CafeMenuFixture.메뉴카테고리,
                 다른_설명,
                 다른_재고,
                 CafeMenuFixture.가격);

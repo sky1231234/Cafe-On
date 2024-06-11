@@ -4,10 +4,10 @@ import com.example.order.cafe.domain.*;
 import com.example.order.cafe.dto.request.CafeCreateRequest;
 import com.example.order.cafe.dto.request.CafeUpdateRequest;
 import com.example.order.cafe.dto.response.CafeResponse;
-import com.example.order.cafe.mapper.BusinessHoursMapper;
-import com.example.order.cafe.mapper.CafeInfoMapper;
+
 import com.example.order.cafe.mapper.CafeMapper;
 import com.example.order.cafe.repository.CafeRepository;
+import com.example.order.cafe.repository.OperationTimePerDayRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,28 +20,25 @@ import java.util.NoSuchElementException;
 @Service
 public class CafeService {
     private final CafeRepository cafeRepository;
+    private final OperationTimePerDayRepository operationTimePerDayRepository;
 
-    public CafeResponse getCafeById(long cafeId){
-
-        Cafe cafe = check_existCafe(cafeId);
-
-        return CafeMapper.INSTANCE.toCafeResponse(cafe);
-    }
-
-    public List<CafeResponse> getAllCafe(){
-
-        return cafeRepository.findAll()
-                .stream()
-                .map(CafeMapper.INSTANCE::toCafeResponse)
-                .toList();
-    }
+    private final CafeMapper cafeMapper;
 
     @Transactional
     public Cafe registerCafe(CafeCreateRequest cafeCreateRequest) {
 
-        Cafe cafe = CafeMapper.INSTANCE.toCafe(cafeCreateRequest.getCafeInfo(), cafeCreateRequest.getBusinessHours());
+        Cafe cafe = cafeMapper.toCafe(cafeCreateRequest.getCafeInfo(), cafeCreateRequest.getBusinessHours());
 
-        return cafeRepository.save(cafe);
+        Cafe savedCafe = cafeRepository.save(cafe);
+
+        List<OperationTimePerDay> operationTimePerDayList = savedCafe.getBusinessHours().getOperationTimePerDayList();
+        for (OperationTimePerDay operationTimePerDay : operationTimePerDayList) {
+            operationTimePerDay.addCafe(savedCafe);
+        }
+
+        operationTimePerDayRepository.saveAll(operationTimePerDayList);
+
+        return savedCafe;
 
     }
 
@@ -50,7 +47,7 @@ public class CafeService {
 
         Cafe cafe = check_existCafe(cafeId);
 
-        Cafe cafe_update = CafeMapper.INSTANCE.toCafe(cafeUpdateRequest.getCafeInfo(), cafeUpdateRequest.getBusinessHours());
+        Cafe cafe_update = cafeMapper.toCafe(cafeUpdateRequest.getCafeInfo(), cafeUpdateRequest.getBusinessHours());
 
         cafe.updateCafe(cafe_update.getCafeInfo(), cafe_update.getBusinessHours());
 
@@ -62,6 +59,21 @@ public class CafeService {
         Cafe cafe = check_existCafe(cafeId);
 
         cafeRepository.delete(cafe);
+    }
+
+    public CafeResponse getCafeById(long cafeId){
+
+        Cafe cafe = check_existCafe(cafeId);
+
+        return cafeMapper.toCafeResponse(cafe);
+    }
+
+    public List<CafeResponse> getAllCafe(){
+
+        return cafeRepository.findAll()
+                .stream()
+                .map(cafeMapper::toCafeResponse)
+                .toList();
     }
 
     public Cafe check_existCafe(long cafeId){

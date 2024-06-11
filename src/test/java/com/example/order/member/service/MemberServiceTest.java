@@ -1,6 +1,7 @@
 package com.example.order.member.service;
 
 import com.example.order.member.domain.AuthType;
+import com.example.order.member.domain.Grade;
 import com.example.order.member.domain.Member;
 import com.example.order.member.dto.response.MemberResponse;
 import com.example.order.member.errorCode.MemberErrorCode;
@@ -34,7 +35,7 @@ public class MemberServiceTest {
     @DisplayName("정상 : 회원가입 테스트")
     public void signUp(){
 
-        memberService.signUp(MemberFixture.아이디, MemberFixture.비밀번호, MemberFixture.이름, MemberFixture.권한, MemberFixture.연락처);
+        memberService.signUp(MemberFixture.아이디, MemberFixture.비밀번호, MemberFixture.이름, MemberFixture.권한, MemberFixture.연락처, MemberFixture.등급);
 
         Optional<Member> 회원가입_회원 = memberRepository.findByMemberId(MemberFixture.아이디);
 
@@ -47,10 +48,10 @@ public class MemberServiceTest {
     @DisplayName("예외 : 존재하는 아이디 회원가입 테스트")
     public void signUp_error_alreadyExist_id(){
 
-        memberService.signUp(MemberFixture.아이디, MemberFixture.비밀번호, MemberFixture.이름, MemberFixture.권한, MemberFixture.연락처);
+        memberService.signUp(MemberFixture.아이디, MemberFixture.비밀번호, MemberFixture.이름, MemberFixture.권한, MemberFixture.연락처, MemberFixture.등급);
 
         assertThatRuntimeException()
-                .isThrownBy(() -> memberService.signUp(MemberFixture.아이디, MemberFixture.비밀번호, MemberFixture.이름, MemberFixture.권한, MemberFixture.연락처))
+                .isThrownBy(() -> memberService.signUp(MemberFixture.아이디, MemberFixture.비밀번호, MemberFixture.이름, MemberFixture.권한, MemberFixture.연락처, MemberFixture.등급))
                         .withMessage(MemberErrorCode.ALREADY_EXIST_MEMBER_ID_EXCEPTION.getValue());
 
     }
@@ -61,7 +62,7 @@ public class MemberServiceTest {
 
         Member 첫번째_회원 = memberService.signUp(
                 MemberFixture.아이디, MemberFixture.비밀번호, MemberFixture.이름,
-                MemberFixture.권한, MemberFixture.연락처);
+                MemberFixture.권한, MemberFixture.연락처, MemberFixture.등급);
 
         MemberResponse memberInfoResponse = memberService.getMember(첫번째_회원.getId());
 
@@ -85,15 +86,16 @@ public class MemberServiceTest {
 
         Member 첫번째_회원 = memberService.signUp(
                 MemberFixture.아이디, MemberFixture.비밀번호, MemberFixture.이름,
-                MemberFixture.권한, MemberFixture.연락처);
+                MemberFixture.권한, MemberFixture.연락처, MemberFixture.등급);
 
         String 두번째_회원_아이디 = "second12";
         String 두번째_회원_비밀번호 = "secondPW";
         String 두번째_회원_이름 = "두번째회원";
         AuthType 두번째_회원_권한 = AuthType.ADMIN;
         String 두번째_회원_연락처 = "0109999999";
+        Grade 두번째_회원_등급 = Grade.SILVER;
 
-        Member 두번째_회원 = memberService.signUp(두번째_회원_아이디,두번째_회원_비밀번호, 두번째_회원_이름, 두번째_회원_권한, 두번째_회원_연락처);
+        Member 두번째_회원 = memberService.signUp(두번째_회원_아이디,두번째_회원_비밀번호, 두번째_회원_이름, 두번째_회원_권한, 두번째_회원_연락처, 두번째_회원_등급);
 
 
         List<MemberResponse> 회원정보_리스트 = memberService.getMemberList();
@@ -118,7 +120,7 @@ public class MemberServiceTest {
 
         Member 첫번째_회원 = memberService.signUp(
                 MemberFixture.아이디, MemberFixture.비밀번호, MemberFixture.이름,
-                MemberFixture.권한, MemberFixture.연락처);
+                MemberFixture.권한, MemberFixture.연락처, MemberFixture.등급);
 
         String 변경_비밀번호  = "updatePassword";
         AuthType 변경_권한 = AuthType.CAFE_OWNER;
@@ -155,7 +157,7 @@ public class MemberServiceTest {
 
         Member 첫번째_회원 = memberService.signUp(
                 MemberFixture.아이디, MemberFixture.비밀번호, MemberFixture.이름,
-                MemberFixture.권한, MemberFixture.연락처);
+                MemberFixture.권한, MemberFixture.연락처, MemberFixture.등급);
 
         memberService.deleteMember(첫번째_회원.getId());
 

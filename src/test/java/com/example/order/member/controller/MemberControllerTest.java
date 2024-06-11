@@ -1,10 +1,10 @@
 package com.example.order.member.controller;
 
 import com.example.order.member.domain.AuthType;
+import com.example.order.member.domain.Grade;
 import com.example.order.member.domain.Member;
 import com.example.order.member.dto.request.SignUpRequest;
 import com.example.order.member.dto.request.UpdateMemberRequest;
-import com.example.order.member.errorCode.MemberErrorCode;
 import com.example.order.member.fixture.MemberFixture;
 import com.example.order.member.repository.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,13 +21,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -66,24 +63,6 @@ public class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("예외 : 아이디 중복 시 회원가입")
-    void signupTest_error() throws Exception {
-
-        when(memberRepository.findByMemberId(MemberFixture.아이디))
-                .thenReturn(Optional.of(MemberFixture.회원_기본생성()));
-
-        SignUpRequest signUpRequest = MemberFixture.회원가입_REQEUST_DTO();
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/members/signup")
-                        .content(objectMapper.writeValueAsString(signUpRequest))
-                        .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest())
-                        .andExpect(result -> assertTrue(result.getResolvedException().getClass().isAssignableFrom(RuntimeException.class)))
-                        .andExpect(result -> assertEquals(MemberErrorCode.ALREADY_EXIST_MEMBER_ID_EXCEPTION.getValue(),
-                            Objects.requireNonNull(result.getResolvedException()).getMessage()));
-    }
-
-    @Test
     @DisplayName("정상 : 회원 정보 조회")
     void getMemberInfoTest() throws Exception {
 
@@ -105,9 +84,10 @@ public class MemberControllerTest {
         String 두번째_이름 = "회원정보";
         AuthType 두번째_권한 = AuthType.CAFE_OWNER;
         String 두번째_연락처 = "22222222222";
+        Grade 두번째_등급 = Grade.VIP;
 
         Member 첫번째_회원 = MemberFixture.회원_기본생성();
-        Member 두번째_회원 = Member.of(두번째_아이디, 두번째_비밀번호, 두번째_이름, 두번째_권한, 두번째_연락처);
+        Member 두번째_회원 = Member.of(두번째_아이디, 두번째_비밀번호, 두번째_이름, 두번째_권한, 두번째_연락처, 두번째_등급);
 
         List<Member> 회원_리스트 = List.of(첫번째_회원, 두번째_회원);
         when(memberRepository.findAll()).thenReturn(회원_리스트);

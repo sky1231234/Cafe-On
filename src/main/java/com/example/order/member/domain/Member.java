@@ -32,7 +32,7 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private String phoneNum;
 
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Grade grade;
 
     @Transient
@@ -57,17 +57,18 @@ public class Member extends BaseTimeEntity {
     @Transient
     private static final int MAX_PHONE_NUM_LENGTH = 11;
 
-    private Member(String memberId, String password, String name, AuthType authType, String phoneNum){
+    private Member(String memberId, String password, String name, AuthType authType, String phoneNum, Grade grade){
         validation(memberId, password, name, phoneNum);
         this.memberId = memberId;
         this.password = password;
         this.name = name;
         this.authType = authType;
         this.phoneNum = phoneNum;
+        this.grade = grade;
     }
 
-    public static Member of(String memberId, String password, String name, AuthType authType, String phoneNum){
-        return new Member(memberId, password, name, authType, phoneNum);
+    public static Member of(String memberId, String password, String name, AuthType authType, String phoneNum, Grade grade){
+        return new Member(memberId, password, name, authType, phoneNum, grade);
     }
 
     private Member(long id, String memberId, String password, String name, AuthType authType, String phoneNum){

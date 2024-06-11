@@ -2,7 +2,6 @@ package com.example.order.cafe.fixture;
 
 import com.example.order.cafe.domain.Cafe;
 import com.example.order.cafe.dto.request.CafeCreateRequest;
-import com.example.order.cafe.dto.request.CafeUpdateRequest;
 
 public class CafeFixture {
 
@@ -16,9 +15,5 @@ public class CafeFixture {
                 BusinessHoursFixture.카페운영시간_REQUEST_DTO());
     }
 
-    public static CafeUpdateRequest 카페_수정_REQUEST_DTO(){
-        return new CafeUpdateRequest(CafeInfoFixture.카페프로필_UPDATE_REQUEST_DTO(),
-                BusinessHoursFixture.카페운영시간_UPDATE_REQUEST_DTO());
-    }
 
 }

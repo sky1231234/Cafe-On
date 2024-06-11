@@ -5,7 +5,6 @@ import com.example.order.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,13 +17,17 @@ public class CafeMenu extends BaseTimeEntity {
     private long id;
 
     @Column(nullable = false)
+    private final long cafeId;
+
+    @Column(nullable = false)
     private final String menuName;
 
-    @ElementCollection
-    @CollectionTable(name = "TemperatureOption",
-            joinColumns = @JoinColumn(name = "id"))
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private final List<TemperatureOption> temperatureOption;
+    private final MenuCategory menuCategory;
+//
+//    @OneToMany(mappedBy = "cafeMenu", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private final List<TemperatureOption> temperatureOptions;
 
     @Column(nullable = false)
     private final String explain;
@@ -42,22 +45,34 @@ public class CafeMenu extends BaseTimeEntity {
     @Transient
     private static final int MIN_PRICE_LENGTH = 0;
 
-    private CafeMenu(String menuName, List<TemperatureOption> temperatureOption, String explain, int stock, int price){
-        validation(menuName, temperatureOption, stock, price);
+    private CafeMenu(long cafeId, String menuName, MenuCategory menuCategory,
+//                     List<TemperatureOption> temperatureOptions,
+                     String explain, int stock, int price){
+        validation(menuName,
+//                temperatureOptions,
+                stock, price);
+        this.cafeId = cafeId;
         this.menuName = menuName;
-        this.temperatureOption = new ArrayList<>(temperatureOption);
+        this.menuCategory = menuCategory;
+//        this.temperatureOptions = new ArrayList<>(temperatureOptions);
         this.explain = explain;
         this.stock = stock;
         this.price = price;
     }
 
-    public static CafeMenu of(String menuName, List<TemperatureOption> temperatureOption, String explain, int stock, int price){
-        return new CafeMenu(menuName, temperatureOption, explain, stock, price);
+    public static CafeMenu of(long cafeId, String menuName, MenuCategory menuCategory,
+//                              List<TemperatureOption> temperatureOptions,
+                              String explain, int stock, int price){
+        return new CafeMenu(cafeId, menuName, menuCategory,
+//                temperatureOptions,
+                explain, stock, price);
     }
 
-    private void validation(String menuName, List<TemperatureOption> temperatureOption, int stock, int price) {
+    private void validation(String menuName,
+//                            List<TemperatureOption> temperatureType,
+                            int stock, int price) {
         validate_menuName(menuName);
-        validate_temperatureOption(temperatureOption);
+//        validate_temperatureOption(temperatureType);
         validate_stock(stock);
         validate_price(price);
 
@@ -70,18 +85,18 @@ public class CafeMenu extends BaseTimeEntity {
     }
 
 
-    private void validate_temperatureOption(List<TemperatureOption> temperatureOption) {
-        isTemperatureOptionNull(temperatureOption);
-        temperatureOption_empty(temperatureOption);
+    private void validate_temperatureOption(List<TemperatureOption> temperatureType) {
+        isTemperatureOptionNull(temperatureType);
+        temperatureOption_empty(temperatureType);
     }
 
-    private void isTemperatureOptionNull(List<TemperatureOption> temperatureOption){
-        if(temperatureOption == null)
+    private void isTemperatureOptionNull(List<TemperatureOption> temperatureType){
+        if(temperatureType == null)
             throw new IllegalArgumentException(CafeMenuErrorMsg.TEMPERATURE_OPTION_NULL_ERROR_MESSAGE.getValue());
     }
 
-    private void temperatureOption_empty(List<TemperatureOption> temperatureOption){
-        if(temperatureOption.isEmpty()){
+    private void temperatureOption_empty(List<TemperatureOption> temperatureType){
+        if(temperatureType.isEmpty()){
             throw new IllegalArgumentException(CafeMenuErrorMsg.TEMPERATURE_OPTION_EMPTY_ERROR_MESSAGE.getValue());
         }
     }
@@ -103,19 +118,21 @@ public class CafeMenu extends BaseTimeEntity {
         return this.menuName.equals(menuName);
     }
 
+//    public List<TemperatureOption> getTemperatureType(){
+//        return List.copyOf(temperatureOptions);
+//    }
+
+
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         CafeMenu cafeMenu = (CafeMenu) o;
         return Objects.equals(menuName, cafeMenu.menuName) &&
-                Objects.equals(temperatureOption, cafeMenu.temperatureOption) &&
+//                Objects.equals(temperatureOptions, cafeMenu.temperatureOptions) &&
                 Objects.equals(price, cafeMenu.price)
                 ;
     }
 
-    public List<TemperatureOption> getTemperatureOption(){
-        return List.copyOf(temperatureOption);
-    }
 
 }

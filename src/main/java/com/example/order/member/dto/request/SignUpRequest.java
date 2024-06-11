@@ -1,6 +1,7 @@
 package com.example.order.member.dto.request;
 
 import com.example.order.member.domain.AuthType;
+import com.example.order.member.domain.Grade;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -29,12 +30,16 @@ public class SignUpRequest {
     @Pattern(regexp = "^\\d+$", message = "휴대폰 번호는 숫자로 이루어져야 합니다.")
     private String phoneNum;
 
-    public SignUpRequest(String memberId, String password, String name, AuthType authType, String phoneNum){
+    @NotNull(message = "등급은 필수 입력 값 입니다.")
+    private Grade grade;
+
+    public SignUpRequest(String memberId, String password, String name, AuthType authType, String phoneNum, Grade grade){
         this.memberId = memberId;
         this.password = password;
         this.name = name;
         this.authType = authType;
         this.phoneNum = phoneNum;
+        this.grade = grade;
     }
 
 }

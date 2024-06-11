@@ -2,20 +2,28 @@ package com.example.order.cafe.mapper;
 
 import com.example.order.cafe.domain.Days;
 import com.example.order.cafe.dto.request.DaysRequest;
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import com.example.order.cafe.dto.request.DaysUpdateRequest;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring")
-public interface DaysMapper {
 
-    DaysMapper INSTANCE = Mappers.getMapper(DaysMapper.class);
+@Component
+public class DaysMapper {
 
-    default Days toDays(DaysRequest daysRequest){
+    public Days toDays(DaysRequest daysRequest){
         if ( daysRequest == null ) {
             return null;
         }
 
         return Days.valueOf(String.valueOf(daysRequest.getDays()));
+
+    }
+
+    public Days toDays(DaysUpdateRequest daysUpdateRequest){
+        if ( daysUpdateRequest == null ) {
+            return null;
+        }
+
+        return Days.valueOf(String.valueOf(daysUpdateRequest.getDays()));
 
     }
 

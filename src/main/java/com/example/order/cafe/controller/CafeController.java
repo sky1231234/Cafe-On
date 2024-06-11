@@ -1,13 +1,13 @@
 package com.example.order.cafe.controller;
 
 import com.example.order.cafe.domain.Cafe;
+import com.example.order.cafe.domain.CafeMenu;
 import com.example.order.cafe.dto.request.CafeCreateRequest;
 import com.example.order.cafe.dto.request.CafeUpdateRequest;
 import com.example.order.cafe.dto.response.CafeResponse;
 import com.example.order.cafe.service.CafeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,14 +26,13 @@ public class CafeController {
 
     private final CafeService cafeService;
 
-
     @PostMapping
     @Operation(summary = "카페 등록", description = "새로운 카페의 프로필, 운영시간 정보를 등록한다.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "카페 정보 등록 성공"),
                     @ApiResponse(responseCode = "404", description = "카페 정보 등록 실패")
             })
-    public ResponseEntity<Cafe> registerCafe(@Validated @RequestBody CafeCreateRequest cafeCreateRequest){
+    public ResponseEntity<CafeMenu> registerCafeMenu(@Validated @RequestBody CafeCreateRequest cafeCreateRequest){
         Cafe cafe = cafeService.registerCafe(cafeCreateRequest);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -45,7 +44,7 @@ public class CafeController {
     }
 
     @PutMapping("/{cafeId}")
-    @Operation(summary = "회원 정보 수정", description = "특정 회원의 정보를 수정한다.",
+    @Operation(summary = "카페 정보 수정", description = "카페 정보를 수정한다.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "카페 정보 수정 성공"),
                     @ApiResponse(responseCode = "404", description = "카페 정보 수정 실패")
@@ -75,7 +74,7 @@ public class CafeController {
                 @ApiResponse(responseCode = "200", description = "카페 정보 조회 성공"),
                 @ApiResponse(responseCode = "404", description = "카페 정보 조회 실패")
         })
-    public ResponseEntity<CafeResponse> getMemberInfo(@PathVariable("cafeId") long cafeId){
+    public ResponseEntity<CafeResponse> getCafe(@PathVariable("cafeId") long cafeId){
 
         return ResponseEntity.ok()
                 .body(cafeService.getCafeById(cafeId));

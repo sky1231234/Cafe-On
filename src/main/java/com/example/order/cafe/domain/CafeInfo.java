@@ -1,7 +1,6 @@
 package com.example.order.cafe.domain;
 
 import com.example.order.cafe.errorMsg.CafeInfoErrorMsg;
-import com.example.order.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,11 +9,8 @@ import java.util.Objects;
 
 @NoArgsConstructor(force = true)
 @Getter
-@Entity
-public class CafeInfo extends BaseTimeEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+@Embeddable
+public class CafeInfo {
 
     @Column(nullable = false)
     private final String name;

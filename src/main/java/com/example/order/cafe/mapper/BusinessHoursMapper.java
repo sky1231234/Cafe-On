@@ -6,27 +6,31 @@ import com.example.order.cafe.dto.request.BusinessHoursRequest;
 import com.example.order.cafe.dto.request.BusinessHoursUpdateRequest;
 import com.example.order.cafe.dto.request.OperationTimePerDayRequest;
 import com.example.order.cafe.dto.request.OperationTimePerDayUpdateRequest;
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import com.example.order.cafe.dto.response.BusinessHoursResponse;
+import com.example.order.cafe.dto.response.OperationTimePerDayResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-@Mapper(componentModel = "spring")
-public interface BusinessHoursMapper {
+@RequiredArgsConstructor
+@Component
+public class  BusinessHoursMapper {
 
-    BusinessHoursMapper INSTANCE = Mappers.getMapper(BusinessHoursMapper.class);
+    private final OperationTimePerDayMapper operationTimePerDayMapper;
 
-    default BusinessHours toBusinessHours(BusinessHoursRequest businessHoursRequest){
+    public BusinessHours toBusinessHours(BusinessHoursRequest businessHoursRequest){
 
         List<OperationTimePerDay> operationTimeList =
-                toOperationTimePerDayList( businessHoursRequest.getOperationTimePerDayList() );
+                toOperationTimePerDayList_forCreate( businessHoursRequest.getOperationTimePerDayList() );
 
         return BusinessHours.of(operationTimeList);
     }
 
-    default List<OperationTimePerDay> toOperationTimePerDayList(List<OperationTimePerDayRequest> operationTimePerDayRequestList) {
+    public List<OperationTimePerDay> toOperationTimePerDayList_forCreate(List<OperationTimePerDayRequest> operationTimePerDayRequestList) {
         if ( operationTimePerDayRequestList == null ) {
             return null;
         }
@@ -34,22 +38,22 @@ public interface BusinessHoursMapper {
         List<OperationTimePerDay> operationTimePerDayList = new ArrayList<>( operationTimePerDayRequestList.size() );
 
         for ( OperationTimePerDayRequest operationTimePerDayRequest : operationTimePerDayRequestList ) {
-            OperationTimePerDay operationTimePerDay = OperationTimePerDayMapper.INSTANCE.toOperationTimePerDay(operationTimePerDayRequest);
+            OperationTimePerDay operationTimePerDay = operationTimePerDayMapper.toOperationTimePerDay(operationTimePerDayRequest);
             operationTimePerDayList.add( operationTimePerDay );
         }
 
         return operationTimePerDayList;
     }
 
-    default BusinessHours toBusinessHours(BusinessHoursUpdateRequest businessHoursUpdateRequest){
+    public BusinessHours toBusinessHours(BusinessHoursUpdateRequest businessHoursUpdateRequest){
 
         List<OperationTimePerDay> operationTimeList =
-                toOperationTimePerDayList_forUpdate( businessHoursUpdateRequest.getOperationTimeList() );
+                toOperationTimePerDayList_forUpdate( businessHoursUpdateRequest.getOperationTimePerDayList() );
 
         return BusinessHours.of(operationTimeList);
     }
 
-    default List<OperationTimePerDay> toOperationTimePerDayList_forUpdate(List<OperationTimePerDayUpdateRequest> operationTimePerDayUpdateRequestList) {
+    public List<OperationTimePerDay> toOperationTimePerDayList_forUpdate(List<OperationTimePerDayUpdateRequest> operationTimePerDayUpdateRequestList) {
         if ( operationTimePerDayUpdateRequestList == null ) {
             return null;
         }
@@ -57,10 +61,35 @@ public interface BusinessHoursMapper {
         List<OperationTimePerDay> operationTimePerDayList = new ArrayList<>( operationTimePerDayUpdateRequestList.size() );
 
         for ( OperationTimePerDayUpdateRequest operationTimePerDayRequest : operationTimePerDayUpdateRequestList ) {
-            OperationTimePerDay operationTimePerDay = OperationTimePerDayMapper.INSTANCE.toOperationTimePerDay(operationTimePerDayRequest);
+            OperationTimePerDay operationTimePerDay = operationTimePerDayMapper.toOperationTimePerDay(operationTimePerDayRequest);
             operationTimePerDayList.add( operationTimePerDay );
         }
 
         return operationTimePerDayList;
     }
+
+
+    public BusinessHoursResponse toBusinessHoursResponse(BusinessHours businessHours){
+
+        List<OperationTimePerDayResponse> operationTimePerDayRequestList =
+                toOperationTimePerDayRequestList(businessHours.getOperationTimePerDayList());
+
+        return new BusinessHoursResponse(operationTimePerDayRequestList);
+    }
+
+    public List<OperationTimePerDayResponse> toOperationTimePerDayRequestList(List<OperationTimePerDay> operationTimePerDayList) {
+        if ( operationTimePerDayList == null ) {
+            return null;
+        }
+
+        List<OperationTimePerDayResponse> operationTimePerDayResponseList = new ArrayList<>( operationTimePerDayList.size() );
+
+        for ( OperationTimePerDay operationTimePerDay : operationTimePerDayList ) {
+            OperationTimePerDayResponse operationTimePerDayResponse = operationTimePerDayMapper.toOperationTimePerDayResponse(operationTimePerDay);
+            operationTimePerDayResponseList.add( operationTimePerDayResponse );
+        }
+
+        return operationTimePerDayResponseList;
+    }
+
 }

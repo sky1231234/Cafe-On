@@ -3,11 +3,13 @@ package com.example.order.cafe.domain;
 import com.example.order.cafe.errorMsg.BusinessHoursErrorMsg;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@NoArgsConstructor(force = true)
 @Getter
 @Embeddable
 public class BusinessHours {
@@ -17,14 +19,6 @@ public class BusinessHours {
 
     @Transient
     public static final int DISTINCT_DAY_SIZE = 7;
-
-    private BusinessHours(){
-        validation(operationTimePerDayList);
-    }
-
-    public static BusinessHours of(){
-        return new BusinessHours();
-    }
 
     private BusinessHours(List<OperationTimePerDay> operationTimePerDayList){
         validation(operationTimePerDayList);
@@ -65,16 +59,11 @@ public class BusinessHours {
     }
 
     public void addBusinessHoursList(List<OperationTimePerDay> operationTimePerDayList){
-//        operationTimePerDayList.add(operationTimePerDay);
-//        OperationTimePerDay.of(operationTimePerDay.getDays(), operationTimePerDay.getOperationTime(), this);
-        this.operationTimePerDayList = operationTimePerDayList;
+        this.operationTimePerDayList.clear();
+        if(operationTimePerDayList != null){
+            this.operationTimePerDayList.addAll(operationTimePerDayList);
+        }
     }
-
-    public void addOperationTimePerDay(OperationTimePerDay operationTimePerDay){
-//        operationTimePerDay.addBusinessHours(this);
-        operationTimePerDayList.add(operationTimePerDay);
-    }
-
 
     public boolean equals(Object o) {
         if (this == o) return true;

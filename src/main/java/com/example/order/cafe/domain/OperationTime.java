@@ -1,18 +1,15 @@
 package com.example.order.cafe.domain;
 
 import com.example.order.cafe.errorMsg.OperationTimeErrorMsg;
-import com.example.order.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(force = true)
 @Getter
-@Entity
-public class OperationTime extends BaseTimeEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+@Embeddable
+public class OperationTime{
+
 
     @Embedded
     @AttributeOverrides({
